@@ -24,7 +24,9 @@ Bacteria is an original procedural fan model inspired by the Backrooms Lifeform 
 
 ## Friendly hazmat explorers
 
-Choose **0, 1 or 2** under **Hazmat explorers** in the builder. The visitors wear yellow suits, dark visors and air packs. They pick their own routes, pause to look around, and wave when they see you before continuing. They do not attack or block you. The visitor count saves with your world.
+Choose **0, 1 or 2** under **Hazmat explorers** in the builder. Each explorer waves once per outing. The greeting offers **Do you want to join me?**, **Make sure to stay safe!** and **See you around!**. An invited explorer follows through the rooms and safe area transitions. Use the nearby **Talk to explorer** button to chat again or choose **Let’s explore on our own** to part ways. Walking away or closing the panel ends the conversation; movement and enemies keep running while you talk.
+
+Enemies can hunt and kill explorers too. A caught explorer gently falls to the floor, with a short message and no gore. Fallen explorers stay dead through area changes for that outing. **Try again**, or returning to the builder and pressing **Play**, starts a fresh outing with the configured visitors alive. Following and deaths are temporary play state; the saved builder world and explorer count are unchanged. Explorers do not attack or block the player.
 
 ## Death animation and enemy sounds
 
