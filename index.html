@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+  <meta name="theme-color" content="#10201e">
+  <link rel="icon" href="data:,">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="Build a strange world, then step inside. Backrooms Builder for Safari and desktop browsers.">
+  <title>Backrooms Builder</title>
+  <style>
+    *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#10201e;color:#ecf5ef;font-family:system-ui,sans-serif;overscroll-behavior:none}
+    #game{position:fixed;inset:0;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+    canvas{display:block;width:100%;height:100%;background:#10201e;touch-action:none;outline:none;-webkit-touch-callout:none}
+    #curtain{position:absolute;inset:0;display:grid;place-content:center;text-align:center;gap:18px;padding:28px;background:radial-gradient(ellipse at 50% 10%,#34463c,#10201e 72%)}
+    #curtain[hidden]{display:none}h1{font-size:clamp(32px,6vw,66px);line-height:1;margin:0;font-weight:500;letter-spacing:-2px}h1 span{display:block;margin-top:12px;color:#78e6b9;font-size:18px;letter-spacing:7px;font-weight:650}
+    p{font-size:16px;line-height:1.5;margin:0;max-width:470px;color:#bccfc7}button{font:600 18px system-ui;border:0;border-radius:9px;padding:17px 32px;background:#79edbd;color:#112a20;cursor:pointer;min-height:54px}button:focus-visible{outline:3px solid white;outline-offset:4px}button:disabled{opacity:.5;cursor:wait}
+    progress{width:min(320px,75vw);height:8px;accent-color:#79edbd;justify-self:center}#status{min-height:24px;font-size:14px}#controls{font-size:14px;color:#9aafa4}
+    #expand{position:absolute;left:max(10px,env(safe-area-inset-left));bottom:max(6px,env(safe-area-inset-bottom));font-size:12px;min-height:32px;padding:6px 14px;background:#142621d9;color:#cce3d7;border:1px solid #74938655;z-index:2}#expand[hidden]{display:none}
+    #rotate{display:none;position:absolute;inset:0;background:#10201eef;z-index:4;place-content:center;text-align:center;padding:30px;gap:12px;font-size:24px}
+    @media(orientation:portrait) and (pointer:coarse){#rotate{display:grid}}
+  </style>
+</head>
+<body>
+<main id="game">
+  <canvas id="unity-canvas" tabindex="0" aria-label="Backrooms Builder game"></canvas>
+  <section id="curtain">
+    <h1>BACKROOMS<span>BUILDER</span></h1>
+    <p>Build a strange place. Step inside.<br>Try not to get caught.</p>
+    <progress id="progress" max="1" value="0" aria-label="Loading game"></progress>
+    <div id="status" role="status">Opening the backrooms…</div>
+    <button id="start-btn" disabled>Loading…</button>
+    <p id="controls">Turn your iPad sideways. Drag rooms to build.<br>Explore with your left thumb; look with your right.</p>
+  </section>
+  <button id="expand" hidden aria-label="Enter full screen">Full screen</button>
+  <div id="rotate">Turn your iPad sideways<p>Your game is waiting in landscape.</p></div>
+</main>
+<script>
+  const canvas=document.querySelector('#unity-canvas'),start=document.querySelector('#start-btn'),status=document.querySelector('#status'),expand=document.querySelector('#expand');
+  let instance=null;
+  window.backroomsState={mode:'loading'};
+  window.render_game_to_text=()=>JSON.stringify(window.backroomsState);
+  // Unity owns its player loop; this hook waits for real frames rather than simulating C# time.
+  window.advanceTime=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+  const touch=navigator.maxTouchPoints>0;
+  if(!touch)document.querySelector('#controls').textContent='Drag rooms to build. WASD to walk, right mouse to look, Shift to sprint.';
+  const config={
+    dataUrl:'Build/Backrooms-Web.data.unityweb',frameworkUrl:'Build/Backrooms-Web.framework.js.unityweb',codeUrl:'Build/Backrooms-Web.wasm.unityweb',
+    streamingAssetsUrl:'StreamingAssets',companyName:"Craig Smith",productName:"Backrooms Builder",productVersion:"0.3.0",
+    autoSyncPersistentDataPath:true,devicePixelRatio:Math.min(window.devicePixelRatio||1,1.5),fullscreenElementID:'game',
+    showBanner:(message,type)=>{if(type==='error')fail(message);else console.warn(message);}
+  };
+  function fail(message){console.error(message);status.textContent='The game could not open. Reload this page to try again.';start.textContent='Reload';start.disabled=false;start.onclick=()=>location.reload();document.querySelector('#curtain').hidden=false;window.backroomsState={mode:'error',message:String(message)};}
+  function fullScreen(){
+    if(document.fullscreenElement){document.exitFullscreen?.();return;}
+    const root=document.querySelector('#game');
+    if(root.requestFullscreen)root.requestFullscreen().catch(()=>{status.textContent='You can also use Safari → Share → Add to Home Screen.';});
+    else if(root.webkitRequestFullscreen)root.webkitRequestFullscreen();
+  }
+  expand.onclick=fullScreen;
+  if(!document.fullscreenEnabled&&!document.webkitFullscreenEnabled)expand.style.display='none';
+  document.addEventListener('fullscreenchange',()=>{expand.textContent=document.fullscreenElement?'Exit full screen':'Full screen';canvas.focus();});
+  document.addEventListener('keydown',e=>{if(e.key.toLowerCase()==='f'&&instance)fullScreen();});
+  canvas.addEventListener('contextmenu',e=>e.preventDefault());
+  document.addEventListener('gesturestart',e=>e.preventDefault(),{passive:false});
+  start.onclick=()=>{
+    // AudioContext resume must happen directly in a tap/click handler on Safari.
+    const audio=instance.Module.WEBAudio?.audioContext;
+    if(audio?.state==='suspended')audio.resume();
+    document.querySelector('#curtain').hidden=true;expand.hidden=false;canvas.focus();
+  };
+  const script=document.createElement('script');script.src='Build/Backrooms-Web.loader.js';script.onerror=()=>fail('Game loader download failed');
+  script.onload=()=>createUnityInstance(canvas,config,progress=>{document.querySelector('#progress').value=progress;status.textContent='Opening the backrooms… '+Math.round(progress*100)+'%';}).then(game=>{
+    instance=game;window.unityInstance=game;start.disabled=false;start.textContent='Enter the backrooms';status.textContent='Your rooms save in this browser.';
+  }).catch(fail);
+  document.body.appendChild(script);
+</script>
+</body>
+</html>
