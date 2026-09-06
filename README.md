@@ -14,3 +14,10 @@ Open the GitHub Pages game in Safari on an iPad or a recent desktop browser. Tur
 The school cameo is fan artwork referencing [Baldi's Basics by Basically Games](https://www.basicallygames.com/baldis-basics-classic). Character models, room geometry and sounds in this prototype are created locally; no original-game assets or recordings are bundled.
 
 This repository contains the generated Unity WebGL player. The Unity source project and native iPad build are maintained separately. The download uses Unity's gzip fallback so it can run on GitHub Pages without custom server headers.
+
+
+## Bacteria and pipe slides
+
+Choose **Entities → Bacteria** to place the wiry hunter. In **Pipes**, drag a colour onto an outside wall, then choose a matching exit in another room or area. Walk into either end to slide: every ride has a 2-in-3 chance of arriving safely and a 1-in-3 chance of falling into the void. Multiple pairs, paired erase/undo and existing-save upgrades are supported.
+
+Bacteria is an original procedural fan model inspired by the Backrooms Lifeform silhouette popularised by Kane Pixels; no original game models or recordings are included.
