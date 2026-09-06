@@ -18,6 +18,10 @@ This repository contains the generated Unity WebGL player. The Unity source proj
 
 ## Bacteria and pipe slides
 
-Choose **Entities → Bacteria** to place the wiry hunter. In **Pipes**, drag a colour onto an outside wall, then choose a matching exit in another room or area. Walk into either end to slide: every ride has a 2-in-3 chance of arriving safely and a 1-in-3 chance of falling into the void. Multiple pairs, paired erase/undo and existing-save upgrades are supported.
+Choose **Entities → Bacteria** to place the wiry hunter. In **Pipes**, drag a colour onto an outside wall, then choose a matching exit in another room or area. Choose **Safe** or **Death** before placing: safe pipes always reach the matching exit, and death pipes always drop into the void. To change an existing pair, select Safe or Death and tap either pipe mouth. Death pipes have an X marker in the builder. Older random pipes become safe when upgrading. Multiple pairs, paired erase/undo and existing-save upgrades are supported.
 
 Bacteria is an original procedural fan model inspired by the Backrooms Lifeform silhouette popularised by Kane Pixels; no original game models or recordings are included.
+
+## Friendly hazmat explorers
+
+Choose **0, 1 or 2** under **Hazmat explorers** in the builder. The visitors wear yellow suits, dark visors and air packs. They pick their own routes, pause to look around, and wave when they see you before continuing. They do not attack or block you. The visitor count saves with your world.

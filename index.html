@@ -45,9 +45,11 @@
   window.advanceTime=ms=>new Promise(resolve=>setTimeout(resolve,ms));
   const touch=navigator.maxTouchPoints>0;
   if(!touch)document.querySelector('#controls').textContent='Drag rooms to build. WASD to walk, right mouse to look, Shift to sprint.';
+  const release="0.5.0";
+  const asset=name=>'Build/'+name+'?v='+encodeURIComponent(release);
   const config={
-    dataUrl:'Build/Backrooms-Web.data.unityweb',frameworkUrl:'Build/Backrooms-Web.framework.js.unityweb',codeUrl:'Build/Backrooms-Web.wasm.unityweb',
-    streamingAssetsUrl:'StreamingAssets',companyName:"Craig Smith",productName:"Backrooms Builder",productVersion:"0.4.0",
+    dataUrl:asset('Backrooms-Web.data.unityweb'),frameworkUrl:asset('Backrooms-Web.framework.js.unityweb'),codeUrl:asset('Backrooms-Web.wasm.unityweb'),
+    streamingAssetsUrl:'StreamingAssets',companyName:"Craig Smith",productName:"Backrooms Builder",productVersion:"0.5.0",
     autoSyncPersistentDataPath:true,devicePixelRatio:Math.min(window.devicePixelRatio||1,1.5),fullscreenElementID:'game',
     showBanner:(message,type)=>{if(type==='error')fail(message);else console.warn(message);}
   };
@@ -70,7 +72,7 @@
     if(audio?.state==='suspended')audio.resume();
     document.querySelector('#curtain').hidden=true;expand.hidden=false;canvas.focus();
   };
-  const script=document.createElement('script');script.src='Build/Backrooms-Web.loader.js';script.onerror=()=>fail('Game loader download failed');
+  const script=document.createElement('script');script.src=asset('Backrooms-Web.loader.js');script.onerror=()=>fail('Game loader download failed');
   script.onload=()=>createUnityInstance(canvas,config,progress=>{document.querySelector('#progress').value=progress;status.textContent='Opening the backrooms… '+Math.round(progress*100)+'%';}).then(game=>{
     instance=game;window.unityInstance=game;start.disabled=false;start.textContent='Enter the backrooms';status.textContent='Your rooms save in this browser.';
   }).catch(fail);
