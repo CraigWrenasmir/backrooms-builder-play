@@ -25,3 +25,9 @@ Bacteria is an original procedural fan model inspired by the Backrooms Lifeform 
 ## Friendly hazmat explorers
 
 Choose **0, 1 or 2** under **Hazmat explorers** in the builder. The visitors wear yellow suits, dark visors and air packs. They pick their own routes, pause to look around, and wave when they see you before continuing. They do not attack or block you. The visitor count saves with your world.
+
+## Death animation and enemy sounds
+
+Being caught now gives a gentle first-person collapse, tilt and fade before the retry screen. Void pipes keep their fall animation and fade out. No gore or flashing effects.
+
+Each enemy has its own original sound: Stalker breathing, Scrambler chittering, Watcher whispers, Bacteria rasps and Baldi ruler slaps, plus movement-timed footsteps. Sounds have direction and distance, are quieter behind walls and stop during death or area transitions. Use **Sound: ON / OFF** in the header; your preference saves in this browser.

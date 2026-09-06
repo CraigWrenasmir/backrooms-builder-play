@@ -45,11 +45,11 @@
   window.advanceTime=ms=>new Promise(resolve=>setTimeout(resolve,ms));
   const touch=navigator.maxTouchPoints>0;
   if(!touch)document.querySelector('#controls').textContent='Drag rooms to build. WASD to walk, right mouse to look, Shift to sprint.';
-  const release="0.5.0";
+  const release="0.6.0";
   const asset=name=>'Build/'+name+'?v='+encodeURIComponent(release);
   const config={
     dataUrl:asset('Backrooms-Web.data.unityweb'),frameworkUrl:asset('Backrooms-Web.framework.js.unityweb'),codeUrl:asset('Backrooms-Web.wasm.unityweb'),
-    streamingAssetsUrl:'StreamingAssets',companyName:"Craig Smith",productName:"Backrooms Builder",productVersion:"0.5.0",
+    streamingAssetsUrl:'StreamingAssets',companyName:"Craig Smith",productName:"Backrooms Builder",productVersion:"0.6.0",
     autoSyncPersistentDataPath:true,devicePixelRatio:Math.min(window.devicePixelRatio||1,1.5),fullscreenElementID:'game',
     showBanner:(message,type)=>{if(type==='error')fail(message);else console.warn(message);}
   };
